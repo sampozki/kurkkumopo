@@ -6,7 +6,6 @@ Automated meme generator <3
 by: sampozki
 
 """
-# TODO: Laitettavan kuvan pienennyt
 
 from PIL import Image
 from PIL import ImageFont
