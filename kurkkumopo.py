@@ -12,15 +12,23 @@
 # TODO: PIL teksti puhekuplaan
 # TODO: KOPIOI KOODI FUZUBOTILTA
 
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
+
 
 def readimage(imagepath):
-    # Lukee kuvan ja palauttaa kuvan
-    pass
+    # Lukee kuvan tiedostosta ja palauttaa sen
+    kuva = Image.open(imagepath)
+    return kuva
 
 
 def addtext(image, text):
-    # Lisää kuvan puhekuplaan tekstiä
-    pass
+    # Lisää kuvan puhekuplaan tekstiä ja palauttaa kuvan
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype('comic.ttf', 30)
+    draw.text((130, 45), str(text), (0, 0, 0), font=font)
+    return image
 
 
 def addimage(image, imagepath):
@@ -29,7 +37,12 @@ def addimage(image, imagepath):
 
 
 def main():
-    pass
+    path = "pohja.png"
+    meemi = "PYTHON VITUN MEEMI"
+    pohja = readimage(path)
+    pohja = addtext(pohja, meemi)
+
+    pohja.save('test.png')
 
 
 if __name__ == "__main__":
