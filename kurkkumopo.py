@@ -57,10 +57,10 @@ def main():
         meemi = argv[1]
         subpath = argv[2]
     else:
-        subpath = "466.png"
-        meemi = "Dänk :D"
+        subpath = "top.png"
+        meemi = ""
         if meemi == "":
-            meemi = "KURKKU VITUN MOPO"
+            meemi = "KURKKU VITUN MOPO :D"
     pohja = readimage(path)
     subimage = readimage(subpath)
     pohja = addtext(pohja, meemi)
