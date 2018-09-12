@@ -7,20 +7,17 @@ by: sampozki
 
 """
 
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
+from PIL import Image, ImageFont, ImageDraw
 from sys import argv
 
 
 def readimage(imagepath):
-    # Lukee kuvan tiedostosta ja palauttaa sen
-    kuva = Image.open(imagepath)
-    return kuva
+    # Reads image and then returns it (really important)
+    return Image.open(imagepath)
 
 
 def addtext(image, text):
-    # Lisää kuvan puhekuplaan tekstiä ja palauttaa kuvan
+    # Adds text to the speakbubble
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype('comicneue.ttf', 36)
     draw.text((115, 45), str(text), (0, 0, 0), font=font)
@@ -28,17 +25,20 @@ def addtext(image, text):
 
 
 def addimage(image, subimage):
-    # Lisää subkuvan kuvan sisälle oikeaan kohtaan
+    # Adds subphoto inside main image
     imagewidth, imageheight = image.size
 
     subimagewidth, subimageheight = subimage.size
-    suhde = subimagewidth / subimageheight
+    ratio = subimagewidth / subimageheight
+
     subimagewidth = int(imagewidth * 0.4)
-    subimageheight = int(imagewidth * 0.4 / suhde)
+    subimageheight = int(imagewidth * 0.4 / ratio)
 
     subimage = subimage.resize((subimagewidth, subimageheight), Image.ANTIALIAS)
 
     position = imagewidth - subimagewidth, imageheight-subimageheight
+
+    # if image doesn't have alpha layer then except ;)
     try:
         image.paste(subimage, position, subimage)
     except Exception as e:
@@ -49,23 +49,24 @@ def addimage(image, subimage):
 
 
 def main():
-    # USAGE: vaihda subpath kuvaan ja sitten meemiin jotain jos haluu :DDDDD
+    # USAGE: subpath = path for subimage, meme = text
     path = "pohja.png"
     print(argv)
     if len(argv) == 3:
-        meemi = argv[1]
+        meme = argv[1]
         subpath = argv[2]
     else:
         subpath = "top.png"
-        meemi = ""
-        if meemi == "":
-            meemi = "KURKKU VITUN MOPO :D"
-    pohja = readimage(path)
-    subimage = readimage(subpath)
-    pohja = addtext(pohja, meemi)
-    addimage(pohja, subimage)
+        meme = ""
+        if meme == "":
+            meme = "KURKKU VITUN MOPO :D"
 
-    pohja.save('test.png')
+    bottomimage = readimage(path)
+    subimage = readimage(subpath)
+    bottomimage = addtext(bottomimage, meme)
+    addimage(bottomimage, subimage)
+
+    bottomimage.save('test.png')
 
 
 if __name__ == "__main__":
