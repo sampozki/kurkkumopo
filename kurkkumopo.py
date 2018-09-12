@@ -1,20 +1,17 @@
-# ULTIMATE hUUTIS KURKKUMOPO
-# Automated meme generator <3
+"""
 
-# sampozki
+ULTIMATE hUUTIS KURKKUMOPO
+Automated meme generator <3
 
-# TODO: aivan kaikki
+by: sampozki
 
-# TODO: Kuvan avaus ja luku DONE
+"""
 # TODO: Laitettavan kuvan pienennyt
-# TODO: Kuvan tallennus DONE
-# TODO: PIL kuva in kuv DONE
-# TODO: PIL teksti puhekuplaan DONE
-# TODO: KOPIOI KOODI FUZUBOTILTA DONE
 
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+from sys import argv
 
 
 def readimage(imagepath):
@@ -26,7 +23,7 @@ def readimage(imagepath):
 def addtext(image, text):
     # Lisää kuvan puhekuplaan tekstiä ja palauttaa kuvan
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype('comicneue.ttf', 32)
+    font = ImageFont.truetype('comicneue.ttf', 36)
     draw.text((115, 45), str(text), (0, 0, 0), font=font)
     return image
 
@@ -34,12 +31,20 @@ def addtext(image, text):
 def addimage(image, subimage):
     # Lisää subkuvan kuvan sisälle oikeaan kohtaan
     imagewidth, imageheight = image.size
+
     subimagewidth, subimageheight = subimage.size
+    suhde = subimagewidth / subimageheight
+    subimagewidth = int(imagewidth * 0.4)
+    subimageheight = int(imagewidth * 0.4 / suhde)
 
-    # TODO: resize subimage sopivan kokoiseksi
+    subimage = subimage.resize((subimagewidth, subimageheight), Image.ANTIALIAS)
 
-    position = imagewidth-subimagewidth, imageheight-subimageheight
-    image.paste(subimage, position, subimage)
+    position = imagewidth - subimagewidth, imageheight-subimageheight
+    try:
+        image.paste(subimage, position, subimage)
+    except Exception as e:
+        print(e)
+        image.paste(subimage, position)
 
     return image
 
@@ -47,8 +52,15 @@ def addimage(image, subimage):
 def main():
     # USAGE: vaihda subpath kuvaan ja sitten meemiin jotain jos haluu :DDDDD
     path = "pohja.png"
-    subpath = "top.png"
-    meemi = "KURKKU VITUN MOPO :D"
+    print(argv)
+    if len(argv) == 3:
+        meemi = argv[1]
+        subpath = argv[2]
+    else:
+        subpath = "466.png"
+        meemi = "Dänk :D"
+        if meemi == "":
+            meemi = "KURKKU VITUN MOPO"
     pohja = readimage(path)
     subimage = readimage(subpath)
     pohja = addtext(pohja, meemi)
