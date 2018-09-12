@@ -6,7 +6,7 @@
 
  ### koodia editoimalla
 
- `KYS`
+ `KYS, häksää ite`
 
  ### Komentoriviltä <3
 
