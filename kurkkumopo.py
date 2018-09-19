@@ -3,7 +3,7 @@
 ULTIMATE hUUTIS KURKKUMOPO
 Automated meme generator <3
 
-by: sampozki
+by: sampozki  2018
 
 """
 
@@ -11,45 +11,55 @@ from PIL import Image, ImageFont, ImageDraw
 from sys import argv
 
 
+# Reads image and then returns it (Separated function is really important;)))) )
 def readimage(imagepath):
-    # Reads image and then returns it (really important)
+
     return Image.open(imagepath)
 
 
+# Adds text to the speakbubble
 def addtext(image, text):
-    # Adds text to the speakbubble
+
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype('comicneue.ttf', 36)
+
     draw.text((115, 45), str(text), (0, 0, 0), font=font)
+
     return image
 
 
+# Adds subphoto inside main image
 def addimage(image, subimage):
-    # Adds subphoto inside main image
+
     imagewidth, imageheight = image.size
 
     subimagewidth, subimageheight = subimage.size
     ratio = subimagewidth / subimageheight
 
-    subimagewidth = int(imagewidth * 0.4)
-    subimageheight = int(imagewidth * 0.4 / ratio)
+    if subimagewidth >= subimageheight:
+        subimagewidth = int(imagewidth * 0.4)
+        subimageheight = int(imagewidth * 0.4 / ratio)
+
+    else:
+        subimageheight = int(imageheight * 0.4)
+        subimagewidth = int(imageheight * 0.4 / (1 / ratio))
 
     subimage = subimage.resize((subimagewidth, subimageheight), Image.ANTIALIAS)
 
     position = imagewidth - subimagewidth, imageheight-subimageheight
 
-    # if image doesn't have alpha layer then except ;)
-    try:
+    # if image has an alpha layer then do:
+    if subimage.mode in ('RGBA', 'LA'):
         image.paste(subimage, position, subimage)
-    except Exception as e:
-        print(e)
+    else:
         image.paste(subimage, position)
 
     return image
 
 
+# USAGE: subpath = path for subimage, meme = text
 def main():
-    # USAGE: subpath = path for subimage, meme = text
+
     path = "pohja.png"
     print(argv)
     if len(argv) == 3:
